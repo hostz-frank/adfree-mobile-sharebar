@@ -19,6 +19,7 @@ Changes remove external content mainly:
 * removed inclusion of external js and css (yandex, see below) for fast access
 * removed Paypal button shown by hotlinking it
 
+* added   Condition to diplay buttons on mobile devices only on public pages.
 * TODO: Refactor and separate frontend from backend stuff to load scripts when needed, not always.
 
 */
@@ -106,7 +107,10 @@ function mobile_sharebar_meta_box_save( $post_id, $post ) {
 
 function mobile_sharebar_styles(){
 	if(get_option('sharebar_use_customcss') != true){
-		wp_enqueue_style( 'sharebar', plugins_url('css/sharebar.css', __FILE__) );
+		// mO: show buttons on public pages only.
+		if ( function_exists( 'is_medonline_public_page' ) && is_medonline_public_page() ) {
+			wp_enqueue_style( 'sharebar', plugins_url('css/sharebar.css', __FILE__) );
+		}
 	}
 }
 
@@ -116,7 +120,10 @@ function mobile_sharebar_scripts(){
 		wp_register_script('jquery', ("//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"), false, '1.10.1', false);
 		wp_enqueue_script('jquery');
 	}
-	wp_enqueue_script( 'sharebar_init', plugins_url('js/sharebar.js', __FILE__) );
+	// mO: show buttons on public pages only.
+	if ( function_exists( 'is_medonline_public_page' ) && is_medonline_public_page() ) {
+		wp_enqueue_script( 'sharebar_init', plugins_url('js/sharebar.js', __FILE__) );
+	}
 }
 
 function mobile_sharebar_admin_styles(){
