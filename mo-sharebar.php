@@ -3,7 +3,7 @@
  * Plugin Name: mO ShareBar
  * Plugin URI: https://github.com/hostz-frank/mo-sharebar/
  * Description: Customizable bar with WhatsApp, Twitter, Facebook and Google+ share buttons on top or bottom of the website. WhatsApp Button works on iPhones and Smartphones only.
- * Version: 1.0
+ * Version: 1.1
  * License: GPLv3
  */
 
@@ -194,14 +194,15 @@ function mobile_sharebar_initialize(){
 		}else{
 			$theShareURL = get_permalink();
 		}
-		echo '<script type="text/javascript">shareBar.init({'.$additional.'"text":"'.$shareText.'", "url":"'.urlencode($theShareURL).'", "share_fb":"'.get_option('sharebar_buttontext_facebook').'", "share_wa":"'.get_option('sharebar_buttontext_whatsapp').'", "share_tw":"'.get_option('sharebar_buttontext_twitter').'", "share_g":"'.get_option('sharebar_buttontext_google').'"});</script>'."\n";
-if(get_option('sharebar_use_customcss') == true){ ?>
-<style type="text/css">
-
-<?php echo get_option('sharebar_customcss'); ?>
-
-</style>
-<?php }
+		// mO: output on public pages only.
+		if ( function_exists( 'is_medonline_public_page' ) && is_medonline_public_page() ) {
+			echo '<script type="text/javascript">shareBar.init({'.$additional.'"text":"'.$shareText.'", "url":"'.urlencode($theShareURL).'", "share_fb":"'.get_option('sharebar_buttontext_facebook').'", "share_wa":"'.get_option('sharebar_buttontext_whatsapp').'", "share_tw":"'.get_option('sharebar_buttontext_twitter').'", "share_g":"'.get_option('sharebar_buttontext_google').'"});</script>'."\n";
+			if(get_option('sharebar_use_customcss') == true) {
+				?><style type="text/css">
+				<?php echo get_option('sharebar_customcss');
+				?></style><?php
+			}
+		}
 	}
 }
 
@@ -225,8 +226,10 @@ function mobile_sharebar_add(){
 			$force_sharebar = true;
 		}
 	}
-	if(get_option('sharebar_automatic') != '' AND ($force_sharebar == true OR in_array( $curPage, get_option('sharebar_automatic_pages')))){
-		echo '<script type="text/javascript">shareBar.show();</script>'."\n";
+	if(get_option('sharebar_automatic') != '' AND ($force_sharebar == true OR in_array( $curPage, get_option('sharebar_automatic_pages')))) {
+		if ( function_exists( 'is_medonline_public_page' ) && is_medonline_public_page() ) {
+			echo '<script type="text/javascript">shareBar.show();</script>'."\n";
+		}
 	}
 }
 
