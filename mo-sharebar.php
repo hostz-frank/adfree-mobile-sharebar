@@ -3,7 +3,7 @@
  * Plugin Name: mO ShareBar
  * Plugin URI: https://github.com/hostz-frank/mo-sharebar/
  * Description: Customizable bar with WhatsApp, Twitter, Facebook and Google+ share buttons on top or bottom of the website. WhatsApp Button works on iPhones and Smartphones only.
- * Version: 1.1
+ * Version: 1.11
  * License: GPLv3
  */
 
@@ -92,7 +92,7 @@ function mobile_sharebar_meta_box_save( $post_id, $post ) {
 	if ( !current_user_can( $post_type->cap->edit_post, $post_id ) ){
 		return $post_id;
 	}
-	$new_meta_value = ( isset( $_POST['mobile-sharebar-meta'] ) ? mysql_real_escape_string($_POST['mobile-sharebar-meta'])  : '' );
+	$new_meta_value = ( isset( $_POST['mobile-sharebar-meta'] ) ? $_POST['mobile-sharebar-meta'] : '' );
 	$meta_key = 'mobile_sharebar_whatsapp_text';
 	$meta_value = get_post_meta( $post_id, $meta_key, true );
 	if ( $new_meta_value && $meta_value == ''){
